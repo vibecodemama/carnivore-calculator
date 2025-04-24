@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Carnivore Protein Calculator</title>
+  <style>
+    :root {
+      --bg-color: #fdf6e3;
+      --card-bg: #fffbed;
+      --accent: #8b5e3c;
+      --accent-light: #c59b7d;
+      --text-color: #333;
+      --header-bg: #eae0d5;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, Cantarell, Ubuntu, roboto, noto, helvetica, arial, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+    }
+    header {
+      background: var(--header-bg);
+      padding: 2rem 1rem;
+      text-align: center;
+      border-bottom: 2px solid var(--accent);
+      box-shadow: 0 2px 4px var(--shadow);
+    }
+    header h1 {
+      margin: 0;
+      color: var(--accent);
+      font-size: 2rem;
+    }
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .input-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      background: var(--card-bg);
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px var(--shadow);
+    }
+    .input-group label {
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    .input-group input[type="number"] {
+      flex: 1;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    .input-group button {
+      padding: 0.6rem 1.2rem;
+      background: var(--accent);
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 1px 3px var(--shadow);
+    }
+    .input-group button:hover {
+      background: var(--accent-light);
+    }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 1rem;
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px var(--shadow);
+    }
+    th, td {
+      padding: 0.75rem;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background: var(--accent-light);
+      color: white;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    @media (max-width: 600px) {
+      .input-group {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .input-group button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Carnivore Protein Calculator</h1>
+    <p>Calculate meat portions for any protein goal</p>
+  </header>
+  <main>
+    <div class="input-group">
+      <label for="protein">Protein per meal (g):</label>
+      <input type="number" id="protein" value="30" min="1">
+      <button id="calcBtn">Calculate</button>
+    </div>
+    <table id="results">
+      <thead>
+        <tr>
+          <th>Meat</th>
+          <th>Raw Weight</th>
+          <th>Cooked Weight</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+  <script>
+    const meats = [
+      { name: "Ground Beef (85/15)", rawProt: 18.6, cookedProt: 25.9 },
+      { name: "Sirloin Steak", rawProt: 20.3, cookedProt: 26.1 },
+      { name: "Beef Tenderloin", rawProt: 22.1, cookedProt: 27.5 },
+      { name: "Beef Liver", rawProt: 20.4, cookedProt: 29.1 },
+      { name: "Lamb Liver", rawProt: 20.4, cookedProt: 26.1 },
+      { name: "Catfish", rawProt: 15.6, cookedProt: 18.2 },
+      { name: "Salmon", rawProt: 20.0, cookedProt: 22.4 },
+      { name: "Pacific Cod", rawProt: 17.9, cookedProt: 17.0 },
+      { name: "Mackerel", rawProt: 19.3, cookedProt: 22.6 },
+      { name: "Herring", rawProt: 17.4, cookedProt: 23.1 },
+      { name: "Pork Chop", rawProt: 20.9, cookedProt: 27.1 },
+      { name: "Turkey Breast", rawProt: 22.5, cookedProt: 30.1 },
+      { name: "Lean Beef Brisket", rawProt: 21.2, cookedProt: 29.6 },
+      { name: "Flat Iron Steak", rawProt: 20.5, cookedProt: 23.0 },
+      { name: "Chicken Breast", rawProt: 23.1, cookedProt: 31.0 },
+      { name: "Chicken Thigh", rawProt: 18.6, cookedProt: 25.9 },
+      { name: "Lamb Shoulder", rawProt: 17.8, cookedProt: 22.4 },
+      { name: "Lamb Leg", rawProt: 19.2, cookedProt: 25.6 },
+      { name: "Ground Lamb", rawProt: 17.5, cookedProt: 27.1 },
+      { name: "Ribeye Steak", rawProt: 20.2, cookedProt: 26.0 }
+    ];
+
+    const proteinInput = document.getElementById("protein");
+    const calcBtn = document.getElementById("calcBtn");
+    const tbody = document.querySelector("#results tbody");
+
+    function gramsToOz(g) {
+      return (g / 28.3495).toFixed(1);
+    }
+
+    function calculate() {
+      const target = parseFloat(proteinInput.value) || 0;
+      let results = meats.map(meat => {
+        const rawG = target / meat.rawProt * 100;
+        const cookedG = target / meat.cookedProt * 100;
+        return {
+          name: meat.name,
+          rawG: rawG,
+          cookedG: cookedG
+        };
+      });
+      results.sort((a, b) => a.rawG - b.rawG);
+      tbody.innerHTML = "";
+      results.forEach(r => {
+        const rawRounded = r.rawG.toFixed(0);
+        const cookedRounded = r.cookedG.toFixed(0);
+        const rawOz = gramsToOz(r.rawG);
+        const cookedOz = gramsToOz(r.cookedG);
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${r.name}</td>
+          <td>${rawRounded} g (${rawOz} oz)</td>
+          <td>${cookedRounded} g (${cookedOz} oz)</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    calcBtn.addEventListener("click", calculate);
+    window.addEventListener("load", calculate);
+  </script>
+</body>
+</html>
