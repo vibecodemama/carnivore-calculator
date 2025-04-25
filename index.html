@@ -40,6 +40,23 @@
       --collapsible-bg: #f8f3e8;
       --citation-color: #666;
       --citation-bg: #f3f3f3;
+      --mercury-verylow: #4caf50;
+      --mercury-low: #8bc34a;
+      --mercury-medium: #ffc107;
+      --mercury-high: #ff9800;
+      --mercury-veryhigh: #f44336;
+      
+      /* Category colors */
+      --beef-color: #cc0000;
+      --beef-color-light: #e57373;
+      --poultry-color: #ffcc00;
+      --poultry-color-light: #ffe082;
+      --pork-color: #ff66cc;
+      --pork-color-light: #f8bbd0;
+      --lamb-color: #9933cc;
+      --lamb-color-light: #ce93d8;
+      --fish-color: #0099cc;
+      --fish-color-light: #81d4fa;
     }
 
     /* Dark mode */
@@ -75,6 +92,23 @@
         --collapsible-bg: #333;
         --citation-color: #aaa;
         --citation-bg: #2a2a2a;
+        --mercury-verylow: #66bb6a;
+        --mercury-low: #8bc34a;
+        --mercury-medium: #ffc107;
+        --mercury-high: #ff9800;
+        --mercury-veryhigh: #f44336;
+        
+        /* Dark mode category colors */
+        --beef-color: #e53935;
+        --beef-color-light: #8e2828;
+        --poultry-color: #ffc107;
+        --poultry-color-light: #8c6d0e;
+        --pork-color: #f48fb1;
+        --pork-color-light: #a65874;
+        --lamb-color: #ab47bc;
+        --lamb-color-light: #6a2974;
+        --fish-color: #29b6f6;
+        --fish-color-light: #1976a3;
       }
     }
 
@@ -339,7 +373,7 @@
     .filter-btn {
       padding: 0.4rem 0.7rem;
       background: var(--filter-inactive);
-      color: var(--filter-text-inactive);
+      color: var(--filter-text-active);
       border: none;
       border-radius: 20px;
       cursor: pointer;
@@ -348,9 +382,53 @@
       white-space: nowrap;
     }
 
-    .filter-btn.active {
+    /* Category-specific filter buttons */
+    .filter-btn[data-category="all"] {
+      background: var(--filter-inactive);
+    }
+    
+    .filter-btn[data-category="all"].active {
       background: var(--filter-active);
-      color: var(--filter-text-active);
+    }
+    
+    .filter-btn[data-category="beef"] {
+      background: var(--beef-color-light);
+    }
+    
+    .filter-btn[data-category="beef"].active {
+      background: var(--beef-color);
+    }
+    
+    .filter-btn[data-category="poultry"] {
+      background: var(--poultry-color-light);
+    }
+    
+    .filter-btn[data-category="poultry"].active {
+      background: var(--poultry-color);
+    }
+    
+    .filter-btn[data-category="pork"] {
+      background: var(--pork-color-light);
+    }
+    
+    .filter-btn[data-category="pork"].active {
+      background: var(--pork-color);
+    }
+    
+    .filter-btn[data-category="lamb"] {
+      background: var(--lamb-color-light);
+    }
+    
+    .filter-btn[data-category="lamb"].active {
+      background: var(--lamb-color);
+    }
+    
+    .filter-btn[data-category="fish"] {
+      background: var(--fish-color-light);
+    }
+    
+    .filter-btn[data-category="fish"].active {
+      background: var(--fish-color);
     }
 
     .filter-btn:hover {
@@ -489,6 +567,27 @@
       color: var(--low-efficiency);
     }
 
+    /* Mercury indicators */
+    .mercury-verylow {
+      color: var(--mercury-verylow);
+    }
+
+    .mercury-low {
+      color: var(--mercury-low);
+    }
+
+    .mercury-medium {
+      color: var(--mercury-medium);
+    }
+
+    .mercury-high {
+      color: var(--mercury-high);
+    }
+
+    .mercury-veryhigh {
+      color: var(--mercury-veryhigh);
+    }
+
     /* Tooltip */
     .tooltip {
       position: relative;
@@ -513,11 +612,22 @@
       padding: 10px;
       border-radius: 6px;
       z-index: 100;
-      width: 200px;
+      width: 240px;
       box-shadow: 0 2px 5px var(--tooltip-shadow);
       font-size: 0.85rem;
       font-weight: normal;
       text-align: left;
+    }
+
+    /* Mercury badge */
+    .mercury-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      margin-left: 0.3rem;
+      font-weight: bold;
+      vertical-align: middle;
     }
 
     /* Export button */
@@ -670,6 +780,7 @@
   </header>
   <main>
     <div class="intro">
+      <p>Welcome! For optimal muscle maintenance and growth, we recommend aiming for <strong>1 gram of protein per pound of desired body weight per day</strong>.</p>
       <p>Use this tool to enter how many grams of protein you want in a meal, and see the raw &amp; cooked weights of popular carnivore-friendly meats.</p>
     </div>
 
@@ -776,22 +887,22 @@
     </button>
   </main>
   <footer>
-    <p>Questions or suggestions? Email <a href="mailto:mama@tallowandgrace.com">mama@tallowandgrace.com</a>.</p>
-    <p>Read more about carnivore and clean living at <a href="https://www.tallowandgrace.com" target="_blank">tallowandgrace.com</a>.</p>
+    <p>Questions or suggestions? Email <a href="mailto:mama@tallowandgrace.com">mama@tallowandgrace.com</a></p>
+    <p>Visit us at <a href="https://tallowandgrace.com" target="_blank">tallowandgrace.com</a></p>
   </footer>
   <script>
-    // Enhanced meat data with categories, fat content, and calories
+    // Enhanced meat data with categories, fat content, calories, and mercury levels for fish
     const meats = [
       { name: "Ground Beef (85/15)", rawProt: 18.6, cookedProt: 25.9, category: "beef", fat: 15.0, calories: 212 },
       { name: "Sirloin Steak", rawProt: 20.3, cookedProt: 26.1, category: "beef", fat: 12.7, calories: 196 },
       { name: "Beef Tenderloin", rawProt: 22.1, cookedProt: 27.5, category: "beef", fat: 13.5, calories: 213 },
       { name: "Beef Liver", rawProt: 20.4, cookedProt: 29.1, category: "beef", fat: 3.6, calories: 135 },
       { name: "Lamb Liver", rawProt: 20.4, cookedProt: 26.1, category: "lamb", fat: 7.5, calories: 157 },
-      { name: "Catfish", rawProt: 15.6, cookedProt: 18.2, category: "fish", fat: 7.8, calories: 132 },
-      { name: "Salmon", rawProt: 20.0, cookedProt: 22.4, category: "fish", fat: 13.4, calories: 208 },
-      { name: "Pacific Cod", rawProt: 17.9, cookedProt: 17.0, category: "fish", fat: 0.7, calories: 82 },
-      { name: "Mackerel", rawProt: 19.3, cookedProt: 22.6, category: "fish", fat: 15.1, calories: 205 },
-      { name: "Herring", rawProt: 17.4, cookedProt: 23.1, category: "fish", fat: 9.0, calories: 158 },
+      { name: "Catfish", rawProt: 15.6, cookedProt: 18.2, category: "fish", fat: 7.8, calories: 132, mercury: { level: "Low", ppm: "0.05-0.15" } },
+      { name: "Salmon", rawProt: 20.0, cookedProt: 22.4, category: "fish", fat: 13.4, calories: 208, mercury: { level: "Very Low", ppm: "0.01-0.09" } },
+      { name: "Pacific Cod", rawProt: 17.9, cookedProt: 17.0, category: "fish", fat: 0.7, calories: 82, mercury: { level: "Low", ppm: "0.05-0.15" } },
+      { name: "Mackerel", rawProt: 19.3, cookedProt: 22.6, category: "fish", fat: 15.1, calories: 205, mercury: { level: "Medium-High", ppm: "0.3-0.7" } },
+      { name: "Herring", rawProt: 17.4, cookedProt: 23.1, category: "fish", fat: 9.0, calories: 158, mercury: { level: "Very Low", ppm: "0.01-0.04" } },
       { name: "Pork Chop", rawProt: 20.9, cookedProt: 27.1, category: "pork", fat: 9.2, calories: 172 },
       { name: "Turkey Breast", rawProt: 22.5, cookedProt: 30.1, category: "poultry", fat: 0.7, calories: 104 },
       { name: "Lean Beef Brisket", rawProt: 21.2, cookedProt: 29.6, category: "beef", fat: 6.5, calories: 155 },
@@ -801,7 +912,13 @@
       { name: "Lamb Shoulder", rawProt: 17.8, cookedProt: 22.4, category: "lamb", fat: 16.5, calories: 233 },
       { name: "Lamb Leg", rawProt: 19.2, cookedProt: 25.6, category: "lamb", fat: 12.7, calories: 194 },
       { name: "Ground Lamb", rawProt: 17.5, cookedProt: 27.1, category: "lamb", fat: 17.1, calories: 234 },
-      { name: "Ribeye Steak", rawProt: 20.2, cookedProt: 26.0, category: "beef", fat: 22.0, calories: 291 }
+      { name: "Ribeye Steak", rawProt: 20.2, cookedProt: 26.0, category: "beef", fat: 22.0, calories: 291 },
+      // New fish additions
+      { name: "Pollock", rawProt: 19.0, cookedProt: 20.0, category: "fish", fat: 1.0, calories: 90, mercury: { level: "Low", ppm: "0.05-0.15" } },
+      { name: "Haddock", rawProt: 20.0, cookedProt: 24.0, category: "fish", fat: 0.8, calories: 90, mercury: { level: "Low", ppm: "0.05-0.15" } },
+      { name: "Flounder/Sole", rawProt: 18.0, cookedProt: 19.5, category: "fish", fat: 1.2, calories: 85, mercury: { level: "Low", ppm: "0.05-0.15" } },
+      { name: "Whiting", rawProt: 18.0, cookedProt: 20.0, category: "fish", fat: 1.0, calories: 90, mercury: { level: "Low", ppm: "0.05-0.15" } },
+      { name: "Lake Whitefish", rawProt: 19.0, cookedProt: 21.0, category: "fish", fat: 7.2, calories: 135, mercury: { level: "Low", ppm: "0.05-0.15" } }
     ];
 
     // Add protein efficiency calculation (protein per 100 calories)
@@ -861,6 +978,17 @@
       return "efficiency-low";
     }
 
+    // Get mercury level class
+    function getMercuryClass(level) {
+      if (!level) return "";
+      if (level.includes("Very Low")) return "mercury-verylow";
+      if (level.includes("Low")) return "mercury-low";
+      if (level.includes("Medium")) return "mercury-medium";
+      if (level.includes("High")) return "mercury-high";
+      if (level.includes("Very High")) return "mercury-veryhigh";
+      return "";
+    }
+
     // Function to create a table row with clean data
     function createTableRow(meatData, rawWeight, cookedWeight, efficiency, showOz) {
       const row = document.createElement("tr");
@@ -869,25 +997,58 @@
       const portionCalories = (rawWeight / 100 * meatData.calories).toFixed(0);
       const portionFat = (rawWeight / 100 * meatData.fat).toFixed(1);
       
-      // Create tooltip content
-      const tooltipContent = `
+      // Create tooltip content with mercury info for fish
+      let tooltipContent = `
         Fat: ${portionFat}g<br>
         Calories: ${portionCalories} kcal<br>
         Portion has ${proteinInput.value}g protein
       `;
       
+      // Add mercury information for fish
+      if (meatData.category === "fish" && meatData.mercury) {
+        const mercuryClass = getMercuryClass(meatData.mercury.level);
+        tooltipContent += `<br><br>Mercury: <span class="${mercuryClass}">${meatData.mercury.level}</span> (${meatData.mercury.ppm} ppm)`;
+      }
+      
       // Add category icon
-      const iconSpan = `<span class="meat-icon icon-${meatData.category}" aria-label="${meatData.category}"></span>`;
+      const iconSpan = document.createElement("span");
+      iconSpan.className = `meat-icon icon-${meatData.category}`;
+      iconSpan.setAttribute("aria-label", meatData.category);
+      
+      // Create the name cell
+      const nameCell = document.createElement("td");
+      nameCell.appendChild(iconSpan);
+      nameCell.appendChild(document.createTextNode(meatData.name));
+      
+      // Create tooltip
+      const tooltip = document.createElement("span");
+      tooltip.className = "tooltip";
+      tooltip.setAttribute("data-content", tooltipContent);
+      tooltip.setAttribute("tabindex", "0");
+      tooltip.textContent = "i";
+      nameCell.appendChild(tooltip);
+      
+      // Create raw weight cell
+      const rawWeightCell = document.createElement("td");
+      rawWeightCell.textContent = formatWeight(rawWeight, showOz);
+      
+      // Create cooked weight cell
+      const cookedWeightCell = document.createElement("td");
+      cookedWeightCell.textContent = formatWeight(cookedWeight, showOz);
+      
+      // Create efficiency cell
+      const efficiencyCell = document.createElement("td");
+      efficiencyCell.className = getEfficiencyClass(efficiency);
+      efficiencyCell.textContent = efficiency.toFixed(1);
+      
+      // Add all cells to the row
+      row.appendChild(nameCell);
+      row.appendChild(rawWeightCell);
+      row.appendChild(cookedWeightCell);
+      row.appendChild(efficiencyCell);
       
       // Store the clean meat name as a data attribute for export
       row.setAttribute('data-meat-name', meatData.name);
-      
-      row.innerHTML = `
-        <td>${iconSpan}${meatData.name} <span class="tooltip" data-content="${tooltipContent}" tabindex="0">i</span></td>
-        <td>${formatWeight(rawWeight, showOz)}</td>
-        <td>${formatWeight(cookedWeight, showOz)}</td>
-        <td class="${getEfficiencyClass(efficiency)}">${efficiency.toFixed(1)}</td>
-      `;
       
       return row;
     }
@@ -1015,7 +1176,8 @@
           cookedG: cookedG,
           efficiency: meat.efficiency,
           fat: meat.fat,
-          calories: meat.calories
+          calories: meat.calories,
+          mercury: meat.mercury
         };
       });
 
