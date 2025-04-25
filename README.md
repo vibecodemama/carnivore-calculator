@@ -2,8 +2,8 @@
 
 ## _Because getting your protein shouldn't be rocket science!_
 
-[[Carnivore Diet](https://img.shields.io/badge/Diet-Carnivore-red)](https://tallowandgrace.com)
-[[Protein](https://img.shields.io/badge/Protein-Gains-brightgreen)](https://tallowandgrace.com)
+[![Carnivore Diet](https://img.shields.io/badge/Diet-Carnivore-red)](https://tallowandgrace.com)
+[![Protein](https://img.shields.io/badge/Protein-Gains-brightgreen)](https://tallowandgrace.com)
 
 ## 🔥 What's This All About?
 
