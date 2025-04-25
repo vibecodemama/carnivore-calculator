@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Carnivore Protein Calculator</title>
   <style>
+    /* Base styles and light mode (default) */
     :root {
       --bg-color: #fdf6e3;
       --card-bg: #fffbed;
@@ -13,97 +14,652 @@
       --text-color: #333;
       --header-bg: #eae0d5;
       --shadow: rgba(0, 0, 0, 0.1);
+      --footer-bg: #eae0d5;
+      --input-bg: #fff;
+      --input-border: #ccc;
+      --table-hover: #f5eee6;
+      --tooltip-bg: #555;
+      --tooltip-text: #fff;
+      --button-text: #fff;
+      --high-efficiency: #4caf50;
+      --mid-efficiency: #ffa726;
+      --low-efficiency: #ef5350;
+      --filter-active: #8b5e3c;
+      --filter-inactive: #e0e0e0;
+      --filter-text-active: #fff;
+      --filter-text-inactive: #333;
+      --tooltip-shadow: rgba(0, 0, 0, 0.3);
+      --table-border: #ddd;
+      --toggle-bg: #e0e0e0;
+      --toggle-circle: #fff;
+      --toggle-active: #8b5e3c;
+      --scroll-thumb: #8b5e3c;
+      --scroll-track: #eae0d5;
+      --error-color: #f44336;
+      --search-icon: #8b5e3c;
+      --collapsible-bg: #f8f3e8;
+      --citation-color: #666;
+      --citation-bg: #f3f3f3;
     }
+
+    /* Dark mode */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #1e1e1e;
+        --card-bg: #2d2d2d;
+        --accent: #c59b7d;
+        --accent-light: #8b5e3c;
+        --text-color: #e0e0e0;
+        --header-bg: #2c2c2c;
+        --shadow: rgba(0, 0, 0, 0.3);
+        --footer-bg: #2c2c2c;
+        --input-bg: #3d3d3d;
+        --input-border: #555;
+        --table-hover: #3d3d3d;
+        --tooltip-bg: #4d4d4d;
+        --tooltip-text: #fff;
+        --high-efficiency: #66bb6a;
+        --mid-efficiency: #ffb74d;
+        --low-efficiency: #ef5350;
+        --filter-active: #c59b7d;
+        --filter-inactive: #3d3d3d;
+        --filter-text-active: #fff;
+        --filter-text-inactive: #e0e0e0;
+        --tooltip-shadow: rgba(0, 0, 0, 0.5);
+        --table-border: #444;
+        --toggle-bg: #555;
+        --toggle-circle: #eee;
+        --toggle-active: #c59b7d;
+        --scroll-thumb: #c59b7d;
+        --scroll-track: #3d3d3d;
+        --collapsible-bg: #333;
+        --citation-color: #aaa;
+        --citation-bg: #2a2a2a;
+      }
+    }
+
     * {
       box-sizing: border-box;
+      max-width: 100%;
     }
+
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, Cantarell, Ubuntu, roboto, noto, helvetica, arial, sans-serif;
+      font-family: Arial, sans-serif;
       background: var(--bg-color);
       color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      transition: background-color 0.3s, color 0.3s;
+      overflow-x: hidden;
+      width: 100%;
     }
+
     header {
       background: var(--header-bg);
-      padding: 2rem 1rem;
+      padding: 1.5rem 1rem;
       text-align: center;
       border-bottom: 2px solid var(--accent);
       box-shadow: 0 2px 4px var(--shadow);
+      width: 100%;
     }
+
     header h1 {
       margin: 0;
       color: var(--accent);
-      font-size: 2rem;
+      font-size: 1.8rem;
+      word-wrap: break-word;
     }
+
+    header p {
+      margin: 0.5rem 0 0 0;
+      font-size: 1rem;
+    }
+
     main {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 0 1rem;
+      flex: 1;
+      width: 100%;
+      max-width: 1000px;
+      margin: 1rem auto;
+      padding: 0 0.8rem;
     }
+
+    .intro {
+      background: var(--card-bg);
+      padding: 1.2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px var(--shadow);
+      margin-bottom: 1.2rem;
+      line-height: 1.4;
+      width: 100%;
+      word-wrap: break-word;
+    }
+
+    .intro p {
+      margin: 0.5rem 0;
+    }
+
+    .collapsible {
+      background: var(--collapsible-bg);
+      border-radius: 8px;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 2px 4px var(--shadow);
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .collapsible-header {
+      padding: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .collapsible-content {
+      padding: 0 1rem 1rem;
+      display: none;
+      line-height: 1.5;
+    }
+
+    .collapsible-content h3 {
+      font-size: 1.1rem;
+      margin: 1rem 0 0.5rem 0;
+    }
+
+    .collapsible-content p {
+      margin: 0.5rem 0;
+      font-size: 0.95rem;
+    }
+
+    .citation {
+      font-size: 0.85rem;
+      color: var(--citation-color);
+      margin-top: 0.25rem;
+      font-style: italic;
+    }
+
+    .references {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--table-border);
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .control-panel {
+      background: var(--card-bg);
+      padding: 1.2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px var(--shadow);
+      margin-bottom: 1.2rem;
+      width: 100%;
+    }
+
+    .input-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+      align-items: center;
+      width: 100%;
+    }
+
     .input-group {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      margin-bottom: 1rem;
-      background: var(--card-bg);
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px var(--shadow);
+      flex: 1;
+      min-width: auto;
+      width: 100%;
     }
+
     .input-group label {
       font-weight: bold;
       flex-shrink: 0;
+      font-size: 0.9rem;
+      white-space: nowrap;
     }
+
     .input-group input[type="number"] {
       flex: 1;
       padding: 0.5rem;
-      border: 1px solid #ccc;
+      border: 1px solid var(--input-border);
       border-radius: 4px;
       font-size: 1rem;
+      background: var(--input-bg);
+      color: var(--text-color);
+      min-width: 0;
+      width: 100%;
     }
-    .input-group button {
-      padding: 0.6rem 1.2rem;
-      background: var(--accent);
-      border: none;
-      color: white;
-      font-size: 1rem;
-      border-radius: 4px;
+
+    .input-group input[type="number"]:focus {
+      outline: 2px solid var(--accent);
+      border-color: var(--accent);
+    }
+
+    .error-message {
+      color: var(--error-color);
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    /* Toggle switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 52px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
       cursor: pointer;
-      box-shadow: 0 1px 3px var(--shadow);
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--toggle-bg);
+      transition: .4s;
+      border-radius: 34px;
     }
-    .input-group button:hover {
-      background: var(--accent-light);
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
+      background-color: var(--toggle-circle);
+      transition: .4s;
+      border-radius: 50%;
     }
+
+    input:checked + .slider {
+      background-color: var(--toggle-active);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    .toggle-label {
+      margin-right: 0.5rem;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .unit-toggle {
+      display: flex;
+      align-items: center;
+    }
+
+    .unit-group {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: 1rem;
+      gap: 1rem;
+    }
+
+    .toggle-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .toggle-labels {
+      display: flex;
+      width: 52px;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      margin-top: 2px;
+    }
+
+    /* Filter buttons */
+    .filter-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+      width: 100%;
+    }
+
+    .filter-btn {
+      padding: 0.4rem 0.7rem;
+      background: var(--filter-inactive);
+      color: var(--filter-text-inactive);
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    .filter-btn.active {
+      background: var(--filter-active);
+      color: var(--filter-text-active);
+    }
+
+    .filter-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Sort controls */
+    .sort-control {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .sort-control label {
+      font-weight: bold;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .sort-control select {
+      padding: 0.5rem;
+      border: 1px solid var(--input-border);
+      border-radius: 4px;
+      background: var(--input-bg);
+      color: var(--text-color);
+      font-size: 0.9rem;
+      max-width: 100%;
+      width: 100%;
+    }
+
+    /* Search box */
+    .search-container {
+      position: relative;
+      margin-bottom: 1rem;
+      width: 100%;
+    }
+
+    .search-container input {
+      width: 100%;
+      padding: 0.5rem 0.5rem 0.5rem 2rem;
+      border: 1px solid var(--input-border);
+      border-radius: 4px;
+      font-size: 0.95rem;
+      background: var(--input-bg);
+      color: var(--text-color);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--search-icon);
+    }
+
+    /* Table container */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px var(--shadow);
+      background: var(--card-bg);
+      width: 100%;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Custom scrollbar */
+    .table-container::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .table-container::-webkit-scrollbar-track {
+      background: var(--scroll-track);
+    }
+
+    .table-container::-webkit-scrollbar-thumb {
+      background: var(--scroll-thumb);
+      border-radius: 3px;
+    }
+
     table {
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
-      margin-top: 1rem;
-      background: var(--card-bg);
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 4px var(--shadow);
+      min-width: 450px;
+      table-layout: fixed;
     }
+
     th, td {
-      padding: 0.75rem;
-      border-bottom: 1px solid #ddd;
+      padding: 0.6rem;
+      border-bottom: 1px solid var(--table-border);
       text-align: left;
+      position: relative;
+      font-size: 0.9rem;
+      white-space: normal;
+      word-wrap: break-word;
     }
+
     th {
       background: var(--accent-light);
       color: white;
+      position: sticky;
+      top: 0;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      overflow: visible;
+      padding-right: 15px; /* Add padding for text to fit */
     }
+
+    /* Adjust column widths */
+    th:nth-child(1), td:nth-child(1) { width: 35%; }
+    th:nth-child(2), td:nth-child(2) { width: 21%; }
+    th:nth-child(3), td:nth-child(3) { width: 21%; }
+    th:nth-child(4), td:nth-child(4) { width: 23%; }
+
     tr:last-child td {
       border-bottom: none;
     }
-    @media (max-width: 600px) {
-      .input-group {
-        flex-direction: column;
-        align-items: stretch;
+
+    tr:hover td {
+      background-color: var(--table-hover);
+    }
+
+    /* Efficiency indicators */
+    .efficiency-high {
+      color: var(--high-efficiency);
+    }
+
+    .efficiency-medium {
+      color: var(--mid-efficiency);
+    }
+
+    .efficiency-low {
+      color: var(--low-efficiency);
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 16px;
+      font-size: 12px;
+      margin-left: 3px;
+      cursor: pointer;
+    }
+
+    .tooltip-content {
+      display: none;
+      position: fixed;
+      background-color: var(--tooltip-bg);
+      color: var(--tooltip-text);
+      padding: 10px;
+      border-radius: 6px;
+      z-index: 100;
+      width: 200px;
+      box-shadow: 0 2px 5px var(--tooltip-shadow);
+      font-size: 0.85rem;
+      font-weight: normal;
+      text-align: left;
+    }
+
+    /* Export button */
+    .export-btn {
+      padding: 0.6rem 1.2rem;
+      background: var(--accent);
+      border: none;
+      color: var(--button-text);
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 1px 3px var(--shadow);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .export-btn:hover {
+      background: var(--accent-light);
+    }
+
+    footer {
+      background: var(--footer-bg);
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      border-top: 1px solid var(--accent);
+      margin-top: 1.5rem;
+      width: 100%;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      main {
+        padding: 0 0.6rem;
+        margin: 0.8rem auto;
       }
-      .input-group button {
+      
+      header h1 {
+        font-size: 1.6rem;
+      }
+      
+      .input-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+      }
+      
+      .unit-toggle {
+        align-self: flex-start;
+      }
+      
+      .sort-control {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .sort-control select {
         width: 100%;
       }
+      
+      th, td {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+      }
+      
+      .filter-container {
+        justify-content: flex-start;
+      }
+      
+      .filter-btn {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.6rem;
+      }
+      
+      /* Tooltip bigger on mobile for easier use */
+      .tooltip {
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+      }
+      
+      .tooltip-content {
+        width: 240px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      header h1 {
+        font-size: 1.4rem;
+      }
+      
+      .intro, .control-panel {
+        padding: 1rem;
+      }
+      
+      .collapsible-header {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+      }
+      
+      .filter-btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.7rem;
+      }
+    }
+
+    /* Icons for meat categories */
+    .meat-icon {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      margin-right: 6px;
+      vertical-align: middle;
+      background-size: contain;
+      background-repeat: no-repeat;
+      border-radius: 50%;
+    }
+
+    .icon-beef {
+      background-color: #cc0000;
+    }
+
+    .icon-poultry {
+      background-color: #ffcc00;
+    }
+
+    .icon-pork {
+      background-color: #ff66cc;
+    }
+
+    .icon-lamb {
+      background-color: #9933cc;
+    }
+
+    .icon-fish {
+      background-color: #0099cc;
     }
   </style>
 </head>
@@ -113,83 +669,440 @@
     <p>Calculate meat portions for any protein goal</p>
   </header>
   <main>
-    <div class="input-group">
-      <label for="protein">Protein per meal (g):</label>
-      <input type="number" id="protein" value="30" min="1">
-      <button id="calcBtn">Calculate</button>
+    <div class="intro">
+      <p>Welcome! For optimal muscle maintenance and growth, we recommend aiming for <strong>1 gram of protein per pound of desired body weight per day</strong>.</p>
+      <p>Use this tool to enter how many grams of protein you want in a meal, and see the raw &amp; cooked weights of popular carnivore-friendly meats.</p>
     </div>
-    <table id="results">
-      <thead>
-        <tr>
-          <th>Meat</th>
-          <th>Raw Weight</th>
-          <th>Cooked Weight</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+
+    <div class="collapsible">
+      <div class="collapsible-header">
+        <span>Learn More About Protein Needs</span>
+        <span class="toggle-icon">+</span>
+      </div>
+      <div class="collapsible-content">
+        <h3>Protein Requirements by Goal</h3>
+        <p><strong>General health:</strong> 0.8g per kg of body weight (minimum RDA)</p>
+        <p><strong>Active individuals:</strong> 1.2-1.7g per kg of body weight</p>
+        <p><strong>Strength athletes:</strong> 1.6-2.2g per kg of body weight</p>
+        <p><strong>Endurance athletes:</strong> 1.2-1.8g per kg of body weight</p>
+        <p><strong>Weight loss:</strong> 1.6-2.2g per kg to preserve muscle mass</p>
+        <p><strong>Muscle gain:</strong> 1.6-2.2g per kg, potentially up to 3.3g/kg in caloric surplus</p>
+        
+        <div class="citation">
+          Based on: International Society of Sports Nutrition Position Stand: protein and exercise. Journal of the International Society of Sports Nutrition (2017)
+        </div>
+        
+        <h3>Protein Timing</h3>
+        <p>For optimal muscle protein synthesis, distribute protein across 3-5 meals per day, with 20-40g high-quality protein per meal.</p>
+        
+        <h3>Protein Efficiency</h3>
+        <p>Protein efficiency considers how much protein you get relative to calories consumed. Leaner meats generally have higher protein efficiency.</p>
+        
+        <div class="references">
+          <h3>Reference</h3>
+          <p>Jäger, R., Kerksick, C.M., Campbell, B.I. et al. International Society of Sports Nutrition Position Stand: protein and exercise. J Int Soc Sports Nutr 14, 20 (2017).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="control-panel">
+      <div class="input-row">
+        <div class="input-group">
+          <label for="protein">Protein per meal:</label>
+          <input type="number" id="protein" value="30" min="1" max="300" aria-label="Enter target protein in grams">
+          <div id="protein-error" class="error-message">Please enter a value between 1-300g</div>
+        </div>
+      </div>
+      
+      <div class="unit-group">
+        <span class="toggle-label">Units:</span>
+        <div class="toggle-wrapper">
+          <label class="switch" aria-label="Toggle between grams and ounces">
+            <input type="checkbox" id="unit-toggle">
+            <span class="slider"></span>
+          </label>
+          <div class="toggle-labels">
+            <span>g</span>
+            <span>oz</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-container" role="group" aria-label="Filter by meat type">
+        <button class="filter-btn active" data-category="all">All Meats</button>
+        <button class="filter-btn" data-category="beef">Beef</button>
+        <button class="filter-btn" data-category="poultry">Poultry</button>
+        <button class="filter-btn" data-category="pork">Pork</button>
+        <button class="filter-btn" data-category="lamb">Lamb</button>
+        <button class="filter-btn" data-category="fish">Fish</button>
+      </div>
+
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-meat" placeholder="Search meats..." aria-label="Search for specific meats">
+      </div>
+
+      <div class="sort-control">
+        <label for="sort-select">Sort by:</label>
+        <select id="sort-select" aria-label="Sort results by different criteria">
+          <option value="efficiency-desc">Protein Efficiency (High to Low)</option>
+          <option value="efficiency-asc">Protein Efficiency (Low to High)</option>
+          <option value="name-asc">Name (A to Z)</option>
+          <option value="name-desc">Name (Z to A)</option>
+          <option value="raw-asc">Raw Weight (Low to High)</option>
+          <option value="cooked-asc">Cooked Weight (Low to High)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table id="results" aria-label="Meat protein results">
+        <thead>
+          <tr>
+            <th>Meat</th>
+            <th id="raw-weight-header">Raw</th>
+            <th id="cooked-weight-header">Cooked</th>
+            <th>Efficiency <span class="tooltip" aria-label="Information about protein efficiency" tabindex="0">i</span></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Tooltip content container (separate from the table for better mobile display) -->
+    <div id="tooltip-container"></div>
+
+    <button id="export-btn" class="export-btn" aria-label="Export results to clipboard">
+      <span>Copy Results</span>
+    </button>
   </main>
+  <footer>
+    <p>Questions or suggestions? Email <a href="mailto:mama@tallowandgrace.com">mama@tallowandgrace.com</a></p>
+    <p>Visit us at <a href="https://tallowandgrace.com" target="_blank">tallowandgrace.com</a></p>
+  </footer>
   <script>
+    // Enhanced meat data with categories, fat content, and calories
     const meats = [
-      { name: "Ground Beef (85/15)", rawProt: 18.6, cookedProt: 25.9 },
-      { name: "Sirloin Steak", rawProt: 20.3, cookedProt: 26.1 },
-      { name: "Beef Tenderloin", rawProt: 22.1, cookedProt: 27.5 },
-      { name: "Beef Liver", rawProt: 20.4, cookedProt: 29.1 },
-      { name: "Lamb Liver", rawProt: 20.4, cookedProt: 26.1 },
-      { name: "Catfish", rawProt: 15.6, cookedProt: 18.2 },
-      { name: "Salmon", rawProt: 20.0, cookedProt: 22.4 },
-      { name: "Pacific Cod", rawProt: 17.9, cookedProt: 17.0 },
-      { name: "Mackerel", rawProt: 19.3, cookedProt: 22.6 },
-      { name: "Herring", rawProt: 17.4, cookedProt: 23.1 },
-      { name: "Pork Chop", rawProt: 20.9, cookedProt: 27.1 },
-      { name: "Turkey Breast", rawProt: 22.5, cookedProt: 30.1 },
-      { name: "Lean Beef Brisket", rawProt: 21.2, cookedProt: 29.6 },
-      { name: "Flat Iron Steak", rawProt: 20.5, cookedProt: 23.0 },
-      { name: "Chicken Breast", rawProt: 23.1, cookedProt: 31.0 },
-      { name: "Chicken Thigh", rawProt: 18.6, cookedProt: 25.9 },
-      { name: "Lamb Shoulder", rawProt: 17.8, cookedProt: 22.4 },
-      { name: "Lamb Leg", rawProt: 19.2, cookedProt: 25.6 },
-      { name: "Ground Lamb", rawProt: 17.5, cookedProt: 27.1 },
-      { name: "Ribeye Steak", rawProt: 20.2, cookedProt: 26.0 }
+      { name: "Ground Beef (85/15)", rawProt: 18.6, cookedProt: 25.9, category: "beef", fat: 15.0, calories: 212 },
+      { name: "Sirloin Steak", rawProt: 20.3, cookedProt: 26.1, category: "beef", fat: 12.7, calories: 196 },
+      { name: "Beef Tenderloin", rawProt: 22.1, cookedProt: 27.5, category: "beef", fat: 13.5, calories: 213 },
+      { name: "Beef Liver", rawProt: 20.4, cookedProt: 29.1, category: "beef", fat: 3.6, calories: 135 },
+      { name: "Lamb Liver", rawProt: 20.4, cookedProt: 26.1, category: "lamb", fat: 7.5, calories: 157 },
+      { name: "Catfish", rawProt: 15.6, cookedProt: 18.2, category: "fish", fat: 7.8, calories: 132 },
+      { name: "Salmon", rawProt: 20.0, cookedProt: 22.4, category: "fish", fat: 13.4, calories: 208 },
+      { name: "Pacific Cod", rawProt: 17.9, cookedProt: 17.0, category: "fish", fat: 0.7, calories: 82 },
+      { name: "Mackerel", rawProt: 19.3, cookedProt: 22.6, category: "fish", fat: 15.1, calories: 205 },
+      { name: "Herring", rawProt: 17.4, cookedProt: 23.1, category: "fish", fat: 9.0, calories: 158 },
+      { name: "Pork Chop", rawProt: 20.9, cookedProt: 27.1, category: "pork", fat: 9.2, calories: 172 },
+      { name: "Turkey Breast", rawProt: 22.5, cookedProt: 30.1, category: "poultry", fat: 0.7, calories: 104 },
+      { name: "Lean Beef Brisket", rawProt: 21.2, cookedProt: 29.6, category: "beef", fat: 6.5, calories: 155 },
+      { name: "Flat Iron Steak", rawProt: 20.5, cookedProt: 23.0, category: "beef", fat: 10.2, calories: 180 },
+      { name: "Chicken Breast", rawProt: 23.1, cookedProt: 31.0, category: "poultry", fat: 3.6, calories: 165 },
+      { name: "Chicken Thigh", rawProt: 18.6, cookedProt: 25.9, category: "poultry", fat: 9.2, calories: 177 },
+      { name: "Lamb Shoulder", rawProt: 17.8, cookedProt: 22.4, category: "lamb", fat: 16.5, calories: 233 },
+      { name: "Lamb Leg", rawProt: 19.2, cookedProt: 25.6, category: "lamb", fat: 12.7, calories: 194 },
+      { name: "Ground Lamb", rawProt: 17.5, cookedProt: 27.1, category: "lamb", fat: 17.1, calories: 234 },
+      { name: "Ribeye Steak", rawProt: 20.2, cookedProt: 26.0, category: "beef", fat: 22.0, calories: 291 }
     ];
 
-    const proteinInput = document.getElementById("protein");
-    const calcBtn = document.getElementById("calcBtn");
-    const tbody = document.querySelector("#results tbody");
+    // Add protein efficiency calculation (protein per 100 calories)
+    meats.forEach(meat => {
+      meat.efficiency = (meat.rawProt / meat.calories) * 100;
+    });
 
+    // DOM Elements
+    const proteinInput = document.getElementById("protein");
+    const unitToggle = document.getElementById("unit-toggle");
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const sortSelect = document.getElementById("sort-select");
+    const searchInput = document.getElementById("search-meat");
+    const tbody = document.querySelector("#results tbody");
+    const exportBtn = document.getElementById("export-btn");
+    const collapsibleHeader = document.querySelector(".collapsible-header");
+    const collapsibleContent = document.querySelector(".collapsible-content");
+    const proteinError = document.getElementById("protein-error");
+    const tooltipContainer = document.getElementById("tooltip-container");
+    const rawWeightHeader = document.getElementById("raw-weight-header");
+    const cookedWeightHeader = document.getElementById("cooked-weight-header");
+
+    // Conversion functions
     function gramsToOz(g) {
       return (g / 28.3495).toFixed(1);
     }
 
+    function ozToGrams(oz) {
+      return (oz * 28.3495).toFixed(0);
+    }
+
+    // Format weight based on unit preference - showing only selected unit
+    function formatWeight(grams, showOz) {
+      if (showOz) {
+        const oz = gramsToOz(grams);
+        return `${oz} oz`;
+      } else {
+        return `${grams.toFixed(0)} g`;
+      }
+    }
+
+    // Update table headers based on selected unit - using shorter text
+    function updateTableHeaders(showOz) {
+      if (showOz) {
+        rawWeightHeader.textContent = "Raw (oz)";
+        cookedWeightHeader.textContent = "Cooked (oz)";
+      } else {
+        rawWeightHeader.textContent = "Raw (g)";
+        cookedWeightHeader.textContent = "Cooked (g)";
+      }
+    }
+
+    // Get efficiency class based on value
+    function getEfficiencyClass(efficiency) {
+      if (efficiency > 10) return "efficiency-high";
+      if (efficiency > 7) return "efficiency-medium";
+      return "efficiency-low";
+    }
+
+    // Handle tooltips
+    function setupTooltips() {
+      // Clean up any existing tooltips
+      const oldTooltips = document.querySelectorAll('.tooltip-content');
+      oldTooltips.forEach(t => t.remove());
+      
+      // Setup header tooltip
+      const headerTooltip = document.querySelector('th .tooltip');
+      if (headerTooltip) {
+        const tooltipContent = document.createElement('div');
+        tooltipContent.className = 'tooltip-content';
+        tooltipContent.textContent = 'Protein per calorie (g/100 kcal). Higher is better for weight management.';
+        tooltipContainer.appendChild(tooltipContent);
+        
+        function showHeaderTooltip(e) {
+          const rect = headerTooltip.getBoundingClientRect();
+          tooltipContent.style.display = 'block';
+          
+          // Position it centered below the tooltip icon
+          tooltipContent.style.top = `${rect.bottom + 5}px`;
+          tooltipContent.style.left = `${rect.left - 70}px`;
+        }
+        
+        function hideHeaderTooltip() {
+          tooltipContent.style.display = 'none';
+        }
+        
+        headerTooltip.addEventListener('click', showHeaderTooltip);
+        headerTooltip.addEventListener('mouseenter', showHeaderTooltip);
+        headerTooltip.addEventListener('mouseleave', hideHeaderTooltip);
+        headerTooltip.addEventListener('focus', showHeaderTooltip);
+        headerTooltip.addEventListener('blur', hideHeaderTooltip);
+      }
+      
+      // Setup meat info tooltips
+      const meatTooltips = document.querySelectorAll('td .tooltip');
+      meatTooltips.forEach(tooltip => {
+        tooltip.addEventListener('click', function(e) {
+          // Remove any existing active tooltips
+          document.querySelectorAll('.tooltip-content.active').forEach(t => t.remove());
+          
+          const content = tooltip.getAttribute('data-content');
+          const tooltipContent = document.createElement('div');
+          tooltipContent.className = 'tooltip-content active';
+          tooltipContent.innerHTML = content;
+          
+          tooltipContainer.appendChild(tooltipContent);
+          
+          // Position tooltip
+          const rect = tooltip.getBoundingClientRect();
+          tooltipContent.style.display = 'block';
+          tooltipContent.style.top = `${rect.top - tooltipContent.offsetHeight - 10}px`;
+          
+          // Adjust horizontal position to make sure it stays on screen
+          let leftPos = rect.left - (tooltipContent.offsetWidth / 2) + (rect.width / 2);
+          const rightEdge = leftPos + tooltipContent.offsetWidth;
+          const viewportWidth = window.innerWidth;
+          
+          if (rightEdge > viewportWidth - 10) {
+            leftPos = viewportWidth - tooltipContent.offsetWidth - 10;
+          }
+          if (leftPos < 10) {
+            leftPos = 10;
+          }
+          
+          tooltipContent.style.left = `${leftPos}px`;
+          
+          // Close when clicking elsewhere
+          const closeTooltip = function(event) {
+            if (!tooltipContent.contains(event.target) && event.target !== tooltip) {
+              tooltipContent.remove();
+              document.removeEventListener('click', closeTooltip);
+            }
+          };
+          
+          // Use setTimeout to avoid immediate closure
+          setTimeout(() => {
+            document.addEventListener('click', closeTooltip);
+          }, 10);
+          
+          e.stopPropagation();
+        });
+      });
+    }
+
+    // Calculate and display results
     function calculate() {
       const target = parseFloat(proteinInput.value) || 0;
-      let results = meats.map(meat => {
+      
+      // Input validation
+      if (target < 1 || target > 300) {
+        proteinError.style.display = "block";
+        return;
+      } else {
+        proteinError.style.display = "none";
+      }
+
+      const showOz = unitToggle.checked;
+      const selectedCategory = document.querySelector(".filter-btn.active").dataset.category;
+      const searchQuery = searchInput.value.toLowerCase();
+      const sortCriteria = sortSelect.value;
+      
+      // Update table headers based on selected unit
+      updateTableHeaders(showOz);
+
+      // Filter meats based on category and search
+      let filteredMeats = meats.filter(meat => {
+        const categoryMatch = selectedCategory === "all" || meat.category === selectedCategory;
+        const searchMatch = meat.name.toLowerCase().includes(searchQuery);
+        return categoryMatch && searchMatch;
+      });
+
+      // Calculate weights
+      let results = filteredMeats.map(meat => {
         const rawG = target / meat.rawProt * 100;
         const cookedG = target / meat.cookedProt * 100;
         return {
           name: meat.name,
+          category: meat.category,
           rawG: rawG,
-          cookedG: cookedG
+          cookedG: cookedG,
+          efficiency: meat.efficiency,
+          fat: meat.fat,
+          calories: meat.calories
         };
       });
-      results.sort((a, b) => a.rawG - b.rawG);
+
+      // Sort results
+      switch (sortCriteria) {
+        case "efficiency-desc":
+          results.sort((a, b) => b.efficiency - a.efficiency);
+          break;
+        case "efficiency-asc":
+          results.sort((a, b) => a.efficiency - b.efficiency);
+          break;
+        case "name-asc":
+          results.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case "name-desc":
+          results.sort((a, b) => b.name.localeCompare(a.name));
+          break;
+        case "raw-asc":
+          results.sort((a, b) => a.rawG - b.rawG);
+          break;
+        case "cooked-asc":
+          results.sort((a, b) => a.cookedG - b.cookedG);
+          break;
+      }
+
+      // Clear previous results
       tbody.innerHTML = "";
+
+      // Render results
       results.forEach(r => {
-        const rawRounded = r.rawG.toFixed(0);
-        const cookedRounded = r.cookedG.toFixed(0);
-        const rawOz = gramsToOz(r.rawG);
-        const cookedOz = gramsToOz(r.cookedG);
         const row = document.createElement("tr");
+        
+        // Calculate calories in this portion
+        const portionCalories = (r.rawG / 100 * r.calories).toFixed(0);
+        const portionFat = (r.rawG / 100 * r.fat).toFixed(1);
+        
+        // Create tooltip content
+        const tooltipContent = `
+          Fat: ${portionFat}g<br>
+          Calories: ${portionCalories} kcal<br>
+          Portion has ${target}g protein
+        `;
+        
+        // Add category icon
+        const iconSpan = `<span class="meat-icon icon-${r.category}" aria-label="${r.category}"></span>`;
+        
         row.innerHTML = `
-          <td>${r.name}</td>
-          <td>${rawRounded} g (${rawOz} oz)</td>
-          <td>${cookedRounded} g (${cookedOz} oz)</td>
+          <td>${iconSpan}${r.name} <span class="tooltip" data-content="${tooltipContent}" tabindex="0">i</span></td>
+          <td>${formatWeight(r.rawG, showOz)}</td>
+          <td>${formatWeight(r.cookedG, showOz)}</td>
+          <td class="${getEfficiencyClass(r.efficiency)}">${r.efficiency.toFixed(1)}</td>
         `;
         tbody.appendChild(row);
       });
+      
+      // Setup tooltips after rendering the table
+      setupTooltips();
     }
 
-    calcBtn.addEventListener("click", calculate);
+    // Event Listeners
+    proteinInput.addEventListener("input", calculate);
+    
+    unitToggle.addEventListener("change", calculate);
+    
+    filterButtons.forEach(button => {
+      button.addEventListener("click", function() {
+        filterButtons.forEach(btn => btn.classList.remove("active"));
+        this.classList.add("active");
+        calculate();
+      });
+    });
+    
+    sortSelect.addEventListener("change", calculate);
+    
+    searchInput.addEventListener("input", calculate);
+    
+    exportBtn.addEventListener("click", function() {
+      // Create a string of the results
+      let resultText = "Carnivore Protein Calculator Results\n\n";
+      resultText += `Protein per meal: ${proteinInput.value}g\n\n`;
+      
+      const unit = unitToggle.checked ? "oz" : "g";
+      resultText += `All weights in ${unit}\n\n`;
+      
+      const rows = tbody.querySelectorAll("tr");
+      rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        // Get text without the tooltip
+        const meatName = cells[0].textContent.trim().replace("i", "");
+        resultText += `${meatName}: Raw: ${cells[1].textContent}, Cooked: ${cells[2].textContent}\n`;
+      });
+      
+      // Copy to clipboard
+      navigator.clipboard.writeText(resultText)
+        .then(() => {
+          exportBtn.textContent = "✓ Copied!";
+          setTimeout(() => {
+            exportBtn.innerHTML = "<span>Copy Results</span>";
+          }, 2000);
+        })
+        .catch(err => {
+          console.error('Could not copy text: ', err);
+          exportBtn.textContent = "Error copying!";
+          setTimeout(() => {
+            exportBtn.innerHTML = "<span>Copy Results</span>";
+          }, 2000);
+        });
+    });
+    
+    // Collapsible section
+    collapsibleHeader.addEventListener("click", function() {
+      const isOpen = collapsibleContent.style.display === "block";
+      collapsibleContent.style.display = isOpen ? "none" : "block";
+      document.querySelector(".toggle-icon").textContent = isOpen ? "+" : "−";
+    });
+
+    // Initialize calculations on page load
     window.addEventListener("load", calculate);
   </script>
 </body>
