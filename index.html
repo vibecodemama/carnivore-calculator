@@ -760,8 +760,8 @@
         <thead>
           <tr>
             <th>Meat</th>
-            <th id="raw-weight-header">Raw</th>
-            <th id="cooked-weight-header">Cooked</th>
+            <th id="raw-weight-header">Raw (g)</th>
+            <th id="cooked-weight-header">Cooked (g)</th>
             <th>Efficiency <span class="tooltip" aria-label="Information about protein efficiency" tabindex="0">i</span></th>
           </tr>
         </thead>
@@ -860,6 +860,37 @@
       if (efficiency > 10) return "efficiency-high";
       if (efficiency > 7) return "efficiency-medium";
       return "efficiency-low";
+    }
+
+    // Function to create a table row with clean data
+    function createTableRow(meatData, rawWeight, cookedWeight, efficiency, showOz) {
+      const row = document.createElement("tr");
+      
+      // Calculate calories in this portion
+      const portionCalories = (rawWeight / 100 * meatData.calories).toFixed(0);
+      const portionFat = (rawWeight / 100 * meatData.fat).toFixed(1);
+      
+      // Create tooltip content
+      const tooltipContent = `
+        Fat: ${portionFat}g<br>
+        Calories: ${portionCalories} kcal<br>
+        Portion has ${proteinInput.value}g protein
+      `;
+      
+      // Add category icon
+      const iconSpan = `<span class="meat-icon icon-${meatData.category}" aria-label="${meatData.category}"></span>`;
+      
+      // Store the clean meat name as a data attribute for export
+      row.setAttribute('data-meat-name', meatData.name);
+      
+      row.innerHTML = `
+        <td>${iconSpan}${meatData.name} <span class="tooltip" data-content="${tooltipContent}" tabindex="0">i</span></td>
+        <td>${formatWeight(rawWeight, showOz)}</td>
+        <td>${formatWeight(cookedWeight, showOz)}</td>
+        <td class="${getEfficiencyClass(efficiency)}">${efficiency.toFixed(1)}</td>
+      `;
+      
+      return row;
     }
 
     // Handle tooltips
@@ -1014,30 +1045,16 @@
       // Clear previous results
       tbody.innerHTML = "";
 
-      // Render results
+      // Render results using our new createTableRow helper
       results.forEach(r => {
-        const row = document.createElement("tr");
-        
-        // Calculate calories in this portion
-        const portionCalories = (r.rawG / 100 * r.calories).toFixed(0);
-        const portionFat = (r.rawG / 100 * r.fat).toFixed(1);
-        
-        // Create tooltip content
-        const tooltipContent = `
-          Fat: ${portionFat}g<br>
-          Calories: ${portionCalories} kcal<br>
-          Portion has ${target}g protein
-        `;
-        
-        // Add category icon
-        const iconSpan = `<span class="meat-icon icon-${r.category}" aria-label="${r.category}"></span>`;
-        
-        row.innerHTML = `
-          <td>${iconSpan}${r.name} <span class="tooltip" data-content="${tooltipContent}" tabindex="0">i</span></td>
-          <td>${formatWeight(r.rawG, showOz)}</td>
-          <td>${formatWeight(r.cookedG, showOz)}</td>
-          <td class="${getEfficiencyClass(r.efficiency)}">${r.efficiency.toFixed(1)}</td>
-        `;
+        const meat = meats.find(m => m.name === r.name);
+        const row = createTableRow(
+          meat, 
+          r.rawG, 
+          r.cookedG, 
+          r.efficiency,
+          showOz
+        );
         tbody.appendChild(row);
       });
       
@@ -1062,6 +1079,7 @@
     
     searchInput.addEventListener("input", calculate);
     
+    // Updated export function that uses the data attributes
     exportBtn.addEventListener("click", function() {
       // Create a string of the results
       let resultText = "Carnivore Protein Calculator Results\n\n";
@@ -1072,10 +1090,12 @@
       
       const rows = tbody.querySelectorAll("tr");
       rows.forEach(row => {
+        const meatName = row.getAttribute('data-meat-name');
         const cells = row.querySelectorAll("td");
-        // Get text without the tooltip
-        const meatName = cells[0].textContent.trim().replace("i", "");
-        resultText += `${meatName}: Raw: ${cells[1].textContent}, Cooked: ${cells[2].textContent}\n`;
+        const rawWeight = cells[1].textContent;
+        const cookedWeight = cells[2].textContent;
+        
+        resultText += `${meatName}: Raw: ${rawWeight}, Cooked: ${cookedWeight}\n`;
       });
       
       // Copy to clipboard
