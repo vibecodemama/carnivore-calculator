@@ -9,25 +9,25 @@
   <meta name="keywords" content="carnivore diet, protein calculator, meat calculator, carnivore protein, keto protein, low carb, meat nutrition, protein requirements">
   <meta name="author" content="Tallow & Grace">
   <link rel="canonical" href="https://calculator.tallowandgrace.com">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/images/logo.png">
-  <link rel="apple-touch-icon" href="/images/logo.png">
-
+  
+  <!-- Favicon generated from steak emoji -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥩</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥩</text></svg>">
+  
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://calculator.tallowandgrace.com">
   <meta property="og:title" content="Carnivore Protein Calculator | Tallow & Grace">
   <meta property="og:description" content="Calculate exactly how much meat you need to reach your protein goals. Find protein amounts for various meats including beef, pork, poultry, lamb, and fish.">
   <meta property="og:image" content="https://calculator.tallowandgrace.com/images/social.png">
-
+  
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://calculator.tallowandgrace.com">
   <meta property="twitter:title" content="Carnivore Protein Calculator | Tallow & Grace">
   <meta property="twitter:description" content="Calculate exactly how much meat you need to reach your protein goals. Find protein amounts for various meats including beef, pork, poultry, lamb, and fish.">
   <meta property="twitter:image" content="https://calculator.tallowandgrace.com/images/social.png">
-
+  
   <!-- Mobile optimization -->
   <meta name="theme-color" content="#8b5e3c">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -37,6 +37,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Lora:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
+    /* Base styles and light mode (default) */
     :root {
       --bg-color: #fdf6f1;
       --card-bg: #fffaf2;
@@ -50,16 +51,115 @@
       --button-text: #fff;
       --scroll-thumb: #7a4a2c;
       --scroll-track: #eae0d5;
+      --shadow: rgba(0, 0, 0, 0.1);
+      --table-hover: #f5eee6;
+      --tooltip-bg: #555;
+      --tooltip-text: #fff;
+      --high-efficiency: #4caf50;
+      --mid-efficiency: #ffa726;
+      --low-efficiency: #ef5350;
+      --filter-active: #8b5e3c;
+      --filter-inactive: #e0e0e0;
+      --filter-text-active: #fff;
+      --filter-text-inactive: #333;
+      --tooltip-shadow: rgba(0, 0, 0, 0.3);
+      --table-border: #ddd;
+      --toggle-bg: #e0e0e0;
+      --toggle-circle: #fff;
+      --toggle-active: #8b5e3c;
+      --error-color: #f44336;
+      --search-icon: #8b5e3c;
+      --collapsible-bg: #f8f3e8;
+      --citation-color: #666;
+      --citation-bg: #f3f3f3;
+      --mercury-verylow: #4caf50;
+      --mercury-low: #8bc34a;
+      --mercury-medium: #ffc107;
+      --mercury-high: #ff9800;
+      --mercury-veryhigh: #f44336;
+      
+      /* Category colors */
+      --beef-color: #cc0000;
+      --beef-color-light: #e57373;
+      --poultry-color: #ffcc00;
+      --poultry-color-light: #ffe082;
+      --pork-color: #ff66cc;
+      --pork-color-light: #f8bbd0;
+      --lamb-color: #9933cc;
+      --lamb-color-light: #ce93d8;
+      --fish-color: #0099cc;
+      --fish-color-light: #81d4fa;
+    }
+
+    /* Dark mode */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #1e1e1e;
+        --card-bg: #2d2d2d;
+        --accent: #c59b7d;
+        --accent-light: #8b5e3c;
+        --text-color: #e0e0e0;
+        --header-bg: #2c2c2c;
+        --shadow: rgba(0, 0, 0, 0.3);
+        --footer-bg: #2c2c2c;
+        --input-bg: #3d3d3d;
+        --input-border: #555;
+        --table-hover: #3d3d3d;
+        --tooltip-bg: #4d4d4d;
+        --tooltip-text: #fff;
+        --high-efficiency: #66bb6a;
+        --mid-efficiency: #ffb74d;
+        --low-efficiency: #ef5350;
+        --filter-active: #c59b7d;
+        --filter-inactive: #3d3d3d;
+        --filter-text-active: #fff;
+        --filter-text-inactive: #e0e0e0;
+        --tooltip-shadow: rgba(0, 0, 0, 0.5);
+        --table-border: #444;
+        --toggle-bg: #555;
+        --toggle-circle: #eee;
+        --toggle-active: #c59b7d;
+        --scroll-thumb: #c59b7d;
+        --scroll-track: #3d3d3d;
+        --collapsible-bg: #333;
+        --citation-color: #aaa;
+        --citation-bg: #2a2a2a;
+        --mercury-verylow: #66bb6a;
+        --mercury-low: #8bc34a;
+        --mercury-medium: #ffc107;
+        --mercury-high: #ff9800;
+        --mercury-veryhigh: #f44336;
+        
+        /* Dark mode category colors */
+        --beef-color: #e53935;
+        --beef-color-light: #8e2828;
+        --poultry-color: #ffc107;
+        --poultry-color-light: #8c6d0e;
+        --pork-color: #f48fb1;
+        --pork-color-light: #a65874;
+        --lamb-color: #ab47bc;
+        --lamb-color-light: #6a2974;
+        --fish-color: #29b6f6;
+        --fish-color-light: #1976a3;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      max-width: 100%;
     }
 
     body {
-      font-family: 'DM Sans', 'Helvetica Neue', sans-serif;
       margin: 0;
+      font-family: 'DM Sans', 'Helvetica Neue', sans-serif;
       background: var(--bg-color);
       color: var(--text-color);
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      transition: background-color 0.3s, color 0.3s;
+      overflow-x: hidden;
+      width: 100%;
     }
 
     header {
@@ -67,19 +167,15 @@
       padding: 1.5rem 1rem;
       text-align: center;
       border-bottom: 2px solid var(--accent);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    header img {
-      max-height: 40px;
-      vertical-align: middle;
-      margin-bottom: 0.5rem;
+      box-shadow: 0 2px 4px var(--shadow);
+      width: 100%;
     }
 
     header h1 {
       margin: 0;
       color: var(--accent);
       font-size: 1.8rem;
+      word-wrap: break-word;
       font-family: 'Playfair Display', serif;
     }
 
@@ -89,12 +185,513 @@
       font-family: 'Lora', serif;
     }
 
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1000px;
+      margin: 1rem auto;
+      padding: 0 0.8rem;
+    }
+
+    .intro {
+      background: var(--card-bg);
+      padding: 1.2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px var(--shadow);
+      margin-bottom: 1.2rem;
+      line-height: 1.4;
+      width: 100%;
+      word-wrap: break-word;
+    }
+
+    .intro p {
+      margin: 0.5rem 0;
+    }
+
+    .collapsible {
+      background: var(--collapsible-bg);
+      border-radius: 8px;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 2px 4px var(--shadow);
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .collapsible-header {
+      padding: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .collapsible-content {
+      padding: 0 1rem 1rem;
+      display: none;
+      line-height: 1.5;
+    }
+
+    .collapsible-content h3 {
+      font-size: 1.1rem;
+      margin: 1rem 0 0.5rem 0;
+    }
+
+    .collapsible-content p {
+      margin: 0.5rem 0;
+      font-size: 0.95rem;
+    }
+
+    .citation {
+      font-size: 0.85rem;
+      color: var(--citation-color);
+      margin-top: 0.25rem;
+      font-style: italic;
+    }
+
+    .references {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--table-border);
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .control-panel {
+      background: var(--card-bg);
+      padding: 1.2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px var(--shadow);
+      margin-bottom: 1.2rem;
+      width: 100%;
+    }
+
+    .input-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+      align-items: center;
+      width: 100%;
+    }
+
+    .input-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex: 1;
+      min-width: auto;
+      width: 100%;
+    }
+
+    .input-group label {
+      font-weight: bold;
+      flex-shrink: 0;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .input-group input[type="number"] {
+      flex: 1;
+      padding: 0.5rem;
+      border: 1px solid var(--input-border);
+      border-radius: 4px;
+      font-size: 1rem;
+      background: var(--input-bg);
+      color: var(--text-color);
+      min-width: 0;
+      width: 100%;
+    }
+
+    .input-group input[type="number"]:focus {
+      outline: 2px solid var(--accent);
+      border-color: var(--accent);
+    }
+
+    .error-message {
+      color: var(--error-color);
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    /* Toggle switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 52px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--toggle-bg);
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
+      background-color: var(--toggle-circle);
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--toggle-active);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    .toggle-label {
+      margin-right: 0.5rem;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .unit-toggle {
+      display: flex;
+      align-items: center;
+    }
+
+    .unit-group {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: 1rem;
+      gap: 1rem;
+    }
+
+    .toggle-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .toggle-labels {
+      display: flex;
+      width: 52px;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      margin-top: 2px;
+    }
+
+    /* Filter buttons */
+    .filter-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+      width: 100%;
+    }
+
+    .filter-btn {
+      padding: 0.4rem 0.7rem;
+      background: var(--filter-inactive);
+      color: var(--filter-text-active);
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    /* Category-specific filter buttons */
+    .filter-btn[data-category="all"] {
+      background: var(--filter-inactive);
+    }
+    
+    .filter-btn[data-category="all"].active {
+      background: var(--filter-active);
+    }
+    
+    .filter-btn[data-category="beef"] {
+      background: var(--beef-color-light);
+    }
+    
+    .filter-btn[data-category="beef"].active {
+      background: var(--beef-color);
+    }
+    
+    .filter-btn[data-category="poultry"] {
+      background: var(--poultry-color-light);
+    }
+    
+    .filter-btn[data-category="poultry"].active {
+      background: var(--poultry-color);
+    }
+    
+    .filter-btn[data-category="pork"] {
+      background: var(--pork-color-light);
+    }
+    
+    .filter-btn[data-category="pork"].active {
+      background: var(--pork-color);
+    }
+    
+    .filter-btn[data-category="lamb"] {
+      background: var(--lamb-color-light);
+    }
+    
+    .filter-btn[data-category="lamb"].active {
+      background: var(--lamb-color);
+    }
+    
+    .filter-btn[data-category="fish"] {
+      background: var(--fish-color-light);
+    }
+    
+    .filter-btn[data-category="fish"].active {
+      background: var(--fish-color);
+    }
+
+    .filter-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Sort controls */
+    .sort-control {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .sort-control label {
+      font-weight: bold;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .sort-control select {
+      padding: 0.5rem;
+      border: 1px solid var(--input-border);
+      border-radius: 4px;
+      background: var(--input-bg);
+      color: var(--text-color);
+      font-size: 0.9rem;
+      max-width: 100%;
+      width: 100%;
+    }
+
+    /* Search box */
+    .search-container {
+      position: relative;
+      margin-bottom: 1rem;
+      width: 100%;
+    }
+
+    .search-container input {
+      width: 100%;
+      padding: 0.5rem 0.5rem 0.5rem 2rem;
+      border: 1px solid var(--input-border);
+      border-radius: 4px;
+      font-size: 0.95rem;
+      background: var(--input-bg);
+      color: var(--text-color);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--search-icon);
+    }
+
+    /* Table container */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px var(--shadow);
+      background: var(--card-bg);
+      width: 100%;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Custom scrollbar */
+    .table-container::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .table-container::-webkit-scrollbar-track {
+      background: var(--scroll-track);
+    }
+
+    .table-container::-webkit-scrollbar-thumb {
+      background: var(--scroll-thumb);
+      border-radius: 3px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 450px;
+      table-layout: fixed;
+    }
+
+    th, td {
+      padding: 0.6rem;
+      border-bottom: 1px solid var(--table-border);
+      text-align: left;
+      position: relative;
+      font-size: 0.9rem;
+      white-space: normal;
+      word-wrap: break-word;
+    }
+
+    th {
+      background: var(--accent-light);
+      color: white;
+      position: sticky;
+      top: 0;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      overflow: visible;
+      padding-right: 15px; /* Add padding for text to fit */
+    }
+
+    /* Adjust column widths */
+    th:nth-child(1), td:nth-child(1) { width: 35%; }
+    th:nth-child(2), td:nth-child(2) { width: 21%; }
+    th:nth-child(3), td:nth-child(3) { width: 21%; }
+    th:nth-child(4), td:nth-child(4) { width: 23%; }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: var(--table-hover);
+    }
+
+    /* Efficiency indicators */
+    .efficiency-high {
+      color: var(--high-efficiency);
+    }
+
+    .efficiency-medium {
+      color: var(--mid-efficiency);
+    }
+
+    .efficiency-low {
+      color: var(--low-efficiency);
+    }
+
+    /* Mercury indicators */
+    .mercury-verylow {
+      color: var(--mercury-verylow);
+    }
+
+    .mercury-low {
+      color: var(--mercury-low);
+    }
+
+    .mercury-medium {
+      color: var(--mercury-medium);
+    }
+
+    .mercury-high {
+      color: var(--mercury-high);
+    }
+
+    .mercury-veryhigh {
+      color: var(--mercury-veryhigh);
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 16px;
+      font-size: 12px;
+      margin-left: 3px;
+      cursor: pointer;
+    }
+
+    .tooltip-content {
+      display: none;
+      position: fixed;
+      background-color: var(--tooltip-bg);
+      color: var(--tooltip-text);
+      padding: 10px;
+      border-radius: 6px;
+      z-index: 100;
+      width: 240px;
+      box-shadow: 0 2px 5px var(--tooltip-shadow);
+      font-size: 0.85rem;
+      font-weight: normal;
+      text-align: left;
+    }
+
+    /* Mercury badge */
+    .mercury-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      margin-left: 0.3rem;
+      font-weight: bold;
+      vertical-align: middle;
+    }
+
+    /* Export button */
+    .export-btn {
+      padding: 0.6rem 1.2rem;
+      background: var(--accent);
+      border: none;
+      color: var(--button-text);
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 1px 3px var(--shadow);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .export-btn:hover {
+      background: var(--accent-light);
+    }
+
     footer {
       background: var(--footer-bg);
       text-align: center;
       padding: 1rem;
       font-size: 0.9rem;
       border-top: 1px solid var(--accent);
+      margin-top: 1.5rem;
+      width: 100%;
       font-family: 'Lora', serif;
     }
 
@@ -102,11 +699,117 @@
       color: var(--accent);
       text-decoration: none;
     }
+
+    @media (max-width: 768px) {
+      main {
+        padding: 0 0.6rem;
+        margin: 0.8rem auto;
+      }
+      
+      header h1 {
+        font-size: 1.6rem;
+      }
+      
+      .input-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+      }
+      
+      .unit-toggle {
+        align-self: flex-start;
+      }
+      
+      .sort-control {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .sort-control select {
+        width: 100%;
+      }
+      
+      th, td {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+      }
+      
+      .filter-container {
+        justify-content: flex-start;
+      }
+      
+      .filter-btn {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.6rem;
+      }
+      
+      /* Tooltip bigger on mobile for easier use */
+      .tooltip {
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+      }
+      
+      .tooltip-content {
+        width: 240px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      header h1 {
+        font-size: 1.4rem;
+      }
+      
+      .intro, .control-panel {
+        padding: 1rem;
+      }
+      
+      .collapsible-header {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+      }
+      
+      .filter-btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.7rem;
+      }
+    }
+
+    /* Icons for meat categories */
+    .meat-icon {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      margin-right: 6px;
+      vertical-align: middle;
+      background-size: contain;
+      background-repeat: no-repeat;
+      border-radius: 50%;
+    }
+
+    .icon-beef {
+      background-color: #cc0000;
+    }
+
+    .icon-poultry {
+      background-color: #ffcc00;
+    }
+
+    .icon-pork {
+      background-color: #ff66cc;
+    }
+
+    .icon-lamb {
+      background-color: #9933cc;
+    }
+
+    .icon-fish {
+      background-color: #0099cc;
+    }
   </style>
 </head>
 <body>
   <header>
-    <img src="/images/logo.png" alt="Tallow & Grace logo">
     <h1>Carnivore Protein Calculator</h1>
     <p>Calculate meat portions for any protein goal</p>
   </header>
