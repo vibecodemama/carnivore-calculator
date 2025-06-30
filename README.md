@@ -2,8 +2,8 @@
 
 ## _Because getting your protein shouldn't be rocket science!_
 
-[![Carnivore Diet](https://img.shields.io/badge/Diet-Carnivore-red)](https://tallowandgrace.com)
-[![Protein](https://img.shields.io/badge/Protein-Gains-brightgreen)](https://tallowandgrace.com)
+[![Carnivore Diet](https://img.shields.io/badge/Diet-Carnivore-red)](https://thecarnivoremama.com)
+[![Protein](https://img.shields.io/badge/Protein-Gains-brightgreen)](https://thecarnivoremama.com)
 
 ## 🔥 What's This All About?
 
@@ -38,13 +38,13 @@ It's a web app! Nothing to install! Just:
 
 1. Clone the repo:
 ```bash
-git clone https://github.com/vibecodemama/carnivore-calculator.git
+git clone https://github.com/raisingpixels/carnivore-calculator.git
 ```
 
 2. Open `index.html` in your browser
 3. Start calculating your protein needs!
 
-Or just visit [our live version](https://vibecodemama.com/carnivore-calculator)!
+Or just visit [our live version](https://raisingpixels.dev/carnivore-calculator)!
 
 ## 🧠 The Science Behind It
 
